@@ -131,6 +131,11 @@ class Portaled extends Component {
   componentDidMount() {
     // relative
     this.unsubscribe = subscribe(this.handleScroll);
+    window.requestAnimationFrame(() => {
+      if (this._unmounted) return;
+      this.setState({isVisible: this.props.isOpened});
+    });
+
     this.handleScroll();
   }
 

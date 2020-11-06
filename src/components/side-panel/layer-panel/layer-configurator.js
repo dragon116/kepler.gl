@@ -32,6 +32,7 @@ import LayerColumnConfigFactory from './layer-column-config';
 import LayerTypeSelectorFactory from './layer-type-selector';
 import DimensionScaleSelector from './dimension-scale-selector';
 import ColorSelector from './color-selector';
+import CustomColorSelector from './custom-color-selector';
 import SourceDataSelectorFactory from 'components/side-panel/common/source-data-selector';
 import VisConfigSwitchFactory from './vis-config-switch';
 import VisConfigSliderFactory from './vis-config-slider';
@@ -138,11 +139,12 @@ export default function LayerConfiguratorFactory(
             {...visConfiguratorProps}
             collapsible
           >
-            {layer.config.colorField ? (
+            {/* {layer.config.colorField ? (
               <LayerColorRangeSelector {...visConfiguratorProps} />
             ) : (
-              <LayerColorSelector {...layerConfiguratorProps} />
-            )}
+              <LayerColorSelector {...layerConfiguratorProps} />              
+            )} */}
+            <LayerCustomColorSelector {...visConfiguratorProps} />
             <ConfigGroupCollapsibleContent>
               <ChannelByValueSelector
                 channel={layer.visualChannels.color}
@@ -1037,6 +1039,23 @@ export const LayerColorRangeSelector = ({layer, onChange, property = 'colorRange
     />
   </SidePanelSection>
 );
+
+export const LayerCustomColorSelector = ({layer, onChange, property = 'colorRange', setColorUI}) => {
+  return (
+  <SidePanelSection>
+    <CustomColorSelector
+      colorSets={[
+        {
+          selectedColor: layer.config.visConfig[property],
+          isRange: true,
+          setColor: colorRange => onChange({[property]: colorRange})
+        }
+      ]}
+      colorUI={layer.config.colorUI[property]}
+      setColorUI={newConfig => setColorUI(property, newConfig)}
+    />
+  </SidePanelSection>
+)};
 
 ChannelByValueSelectorFactory.deps = [VisConfigByFieldSelectorFactory];
 export function ChannelByValueSelectorFactory(VisConfigByFieldSelector) {
